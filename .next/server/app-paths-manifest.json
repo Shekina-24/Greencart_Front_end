@@ -1,0 +1,6 @@
+{
+  "/compte/page": "app/compte/page.js",
+  "/admin/public-data/page": "app/admin/public-data/page.js",
+  "/admin/bi/page": "app/admin/bi/page.js",
+  "/admin/analytics/page": "app/admin/analytics/page.js"
+}
