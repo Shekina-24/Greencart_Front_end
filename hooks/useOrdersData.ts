@@ -7,11 +7,16 @@ import { fetchOrders } from "@/lib/services/orders";
 import type { Order } from "@/lib/types";
 
 export function useOrdersData(enabled: boolean) {
-  const tokens = useMemo(() => (enabled ? getStoredTokens() : null), [enabled]);
+  const key = useMemo(() => {
+    if (!enabled) return null;
+    const tokens = getStoredTokens();
+    return tokens ? ["orders", tokens.accessToken] : "orders-missing-token";
+  }, [enabled]);
 
   const { data, error, isLoading, mutate } = useSWR<Order[]>(
-    tokens ? ["orders", tokens.accessToken] : null,
+    key,
     async () => {
+      const tokens = getStoredTokens();
       if (!tokens) {
         throw new Error("missing-token");
       }
@@ -19,7 +24,8 @@ export function useOrdersData(enabled: boolean) {
       return response.items;
     },
     {
-      revalidateOnFocus: false
+      revalidateOnFocus: false,
+      shouldRetryOnError: (err) => (err as Error).message !== "missing-token"
     }
   );
 

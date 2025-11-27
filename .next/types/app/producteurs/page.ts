@@ -1,8 +1,8 @@
-// File: C:\Users\azang\OneDrive\Desktop\Shekina\Greencart\Greencart\app\admin\bi\page.tsx
-import * as entry from '../../../../../app/admin/bi/page.js'
+// File: C:\Users\azang\OneDrive\Desktop\Shekina\Greencart\Greencart\app\producteurs\page.tsx
+import * as entry from '../../../../app/producteurs/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
-type TEntry = typeof import('../../../../../app/admin/bi/page.js')
+type TEntry = typeof import('../../../../app/producteurs/page.js')
 
 // Check that the entry is a valid entry
 checkFields<Diff<{

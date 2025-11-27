@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,10 +11,49 @@ interface HeaderProps {
   onOpenCart: () => void;
   onOpenLogin: () => void;
   onOpenRegister: () => void;
-  onLogout: () => void;
+  onLogout?: () => void;
+  user?: User | null;
+  isAuthenticating?: boolean;
   isScrolled: boolean;
-  user: User | null;
-  isAuthenticating: boolean;
+}
+
+const ROLE_LABEL: Record<User["role"], string> = {
+  consumer: "Consommateur",
+  producer: "Producteur",
+  admin: "Admin"
+};
+
+type NavLink = { label: string; href: string | { pathname: string; hash?: string } };
+
+const BASE_NAV_LINKS: NavLink[] = [
+  { label: "Home", href: "/" },
+
+  { label: "Producteurs", href: "/producteurs" },
+  { label: "Aide", href: "/aide" }
+];
+
+const ROLE_NAV_LINKS: Partial<Record<User["role"], NavLink[]>> = {
+  consumer: [
+    { label: "Mon compte", href: "/compte" },
+    { label: "Mes commandes", href: "/compte/commandes" },
+    { label: "Mes avis", href: "/compte/avis" },
+    { label: "Impact perso", href: "/compte/impact" }
+  ],
+  producer: [
+    { label: "Dashboard producteur", href: "/producteurs/dashboard" },
+    { label: "Mes produits", href: "/producteurs/produits" },
+    { label: "Commandes", href: "/producteurs/commandes" }
+  ],
+  admin: [
+    { label: "Admin analytics", href: "/admin/analytics" },
+    { label: "Données publiques", href: "/admin/public-data" },
+    { label: "Utilisateurs", href: "/admin/utilisateurs" }
+  ]
+};
+
+function formatUserLabel(user: User): string {
+  const name = [user.firstName, user.lastName].filter(Boolean).join(" ").trim();
+  return name || user.email;
 }
 
 export default function Header({
@@ -23,58 +62,12 @@ export default function Header({
   onOpenLogin,
   onOpenRegister,
   onLogout,
-  isScrolled,
   user,
-  isAuthenticating
+  isAuthenticating,
+  isScrolled
 }: HeaderProps) {
   const [isMenuOpen, setMenuOpen] = useState(false);
-
-  const role = user?.role ?? null;
-  const showCart = role !== "producer" && role !== "admin";
-  const roleLabel = role === "admin" ? "Admin" : role === "producer" ? "Producteur" : role === "consumer" ? "Consommateur" : null;
-
-  const navLinks = (() => {
-    if (role === "consumer") {
-      return [
-        { label: "Catalogue", href: "/catalogue" },
-        { label: "Profil", href: "/compte" },
-        { label: "Mes commandes", href: "/compte/commandes" },
-        { label: "Mon impact", href: "/compte/impact" },
-        { label: "Mes avis", href: "/compte/avis" },
-        { label: "Aide", href: "/aide" }
-      ];
-    }
-    if (role === "producer") {
-      return [
-        { label: "Dashboard", href: "/producteurs/dashboard" },
-        { label: "Mes produits", href: "/producteurs/produits" },
-        { label: "Commandes", href: "/producteurs/commandes" },
-        { label: "Reco IA", href: "/producteurs/recommandations" },
-        { label: "Profil", href: "/compte" },
-        { label: "Aide", href: "/aide" }
-      ];
-    }
-    if (role === "admin") {
-      return [
-        { label: "Analytics internes", href: "/admin/analytics" },
-        { label: "Tableau BI", href: "/admin/bi" },
-        { label: "Données publiques", href: "/admin/public-data" },
-        { label: "Rapports", href: "/admin/reports" },
-        { label: "Utilisateurs", href: "/admin/utilisateurs" },
-        { label: "Catalogue", href: "/catalogue" },
-        { label: "Profil", href: "/compte" },
-        { label: "Aide", href: "/aide" }
-      ];
-    }
-    // Invité (non connecté)
-    return [
-      { label: "Valeurs", href: { pathname: "/", hash: "mission" } },
-      { label: "Catalogue", href: { pathname: "/", hash: "catalogue" } },
-      { label: "Impact", href: { pathname: "/", hash: "impact" } },
-      { label: "Producteurs", href: { pathname: "/", hash: "producteurs" } },
-      { label: "Aide", href: "/aide" }
-    ];
-  })();
+  const roleLinks = useMemo(() => (user && user.role ? ROLE_NAV_LINKS[user.role] ?? [] : []), [user]);
 
   const toggleMenu = () => {
     setMenuOpen((current) => !current);
@@ -92,7 +85,9 @@ export default function Header({
           <Link href="/" className="brand-name" onClick={closeMenu}>
             GreenCart
           </Link>
-          {roleLabel ? <span className="badge" style={{ marginLeft: 8 }}>{roleLabel}</span> : null}
+          <span className="muted" style={{ fontSize: "var(--fs-small)" }}>
+              
+          </span>
         </div>
 
         <button
@@ -113,7 +108,12 @@ export default function Header({
             role="navigation"
             aria-label="Navigation principale"
           >
-            {navLinks.map((link) => (
+            {BASE_NAV_LINKS.map((link) => (
+              <Link key={link.label} href={link.href} onClick={closeMenu}>
+                {link.label}
+              </Link>
+            ))}
+            {roleLinks.map((link) => (
               <Link key={link.label} href={link.href} onClick={closeMenu}>
                 {link.label}
               </Link>
@@ -121,59 +121,30 @@ export default function Header({
           </nav>
 
           <div className="nav-actions">
-            {showCart ? (
-              <button
-                className="btn btn--ghost"
-                type="button"
-                onClick={() => {
-                  onOpenCart();
-                  closeMenu();
-                }}
-              >
-                Mon panier ({cartCount})
-              </button>
-            ) : null}
+            <button className="btn btn--ghost" type="button" onClick={() => { onOpenCart(); closeMenu(); }}>
+              Mon panier ({cartCount})
+            </button>
             {user ? (
-              <>
+              <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "center", flexWrap: "wrap" }}>
+                <div className="badge badge--ghost">
+                  {ROLE_LABEL[user.role]}
+                </div>
                 <span className="muted" style={{ fontSize: "var(--fs-small)" }}>
-                  Bonjour {user.firstName || user.lastName || user.email} {roleLabel ? `(${roleLabel})` : ""}
+                  {formatUserLabel(user)}
                 </span>
-                <button
-                  className="btn btn--ghost"
-                  type="button"
-                  onClick={() => {
-                    onLogout();
-                    closeMenu();
-                  }}
-                >
-                  Se deconnecter
+                <button className="btn btn--ghost" type="button" onClick={() => { onLogout?.(); closeMenu(); }} disabled={isAuthenticating}>
+                  {isAuthenticating ? "Chargement..." : "Se deconnecter"}
                 </button>
-              </>
+              </div>
             ) : (
-              <>
-                <button
-                  className="btn btn--ghost"
-                  type="button"
-                  onClick={() => {
-                    onOpenLogin();
-                    closeMenu();
-                  }}
-                  disabled={isAuthenticating}
-                >
+              <div style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap", alignItems: "center" }}>
+                <button className="btn btn--ghost" type="button" onClick={() => { onOpenLogin(); closeMenu(); }}>
                   Se connecter
                 </button>
-                <button
-                  className="btn btn--primary"
-                  type="button"
-                  onClick={() => {
-                    onOpenRegister();
-                    closeMenu();
-                  }}
-                  disabled={isAuthenticating}
-                >
+                <button className="btn btn--primary" type="button" onClick={() => { onOpenRegister(); closeMenu(); }}>
                   Creer un compte
                 </button>
-              </>
+              </div>
             )}
           </div>
         </div>

@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useCallback, useEffect, useId, useLayoutEffect, useRef } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 interface ModalProps {
@@ -21,8 +21,7 @@ export default function Modal({
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement | null>(null);
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const rootRef = useRef<HTMLElement | null>(null);
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -76,38 +75,25 @@ export default function Modal({
     return () => panel.removeEventListener("keydown", onKey);
   }, [isOpen]);
 
-  useLayoutEffect(() => {
-    if (typeof document === "undefined") {
-      return;
-    }
-    if (!rootRef.current) {
-      let root = document.getElementById("greencart-modal-root");
-      if (!root) {
-        root = document.createElement("div");
-        root.id = "greencart-modal-root";
-        document.body.appendChild(root);
-      }
-      rootRef.current = root;
-    }
-    if (!containerRef.current) {
-      const container = document.createElement("div");
-      rootRef.current!.appendChild(container);
-      containerRef.current = container;
-    }
-    return () => {
-      const container = containerRef.current;
-      if (container) {
-        try {
-          container.remove();
-        } catch {
-          // ignore
-        }
-      }
-      containerRef.current = null;
-    };
-  }, []);
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (container) return;
 
-  if (!isOpen) {
+    let root = document.getElementById("greencart-modal-root");
+    if (!root) {
+      root = document.createElement("div");
+      root.id = "greencart-modal-root";
+      document.body.appendChild(root);
+    }
+
+    const el = document.createElement("div");
+    root.appendChild(el);
+    setContainer(el);
+
+    // Keep the node mounted to avoid React trying to detach an already-removed portal target.
+  }, [container]);
+
+  if (!isOpen || !container) {
     return null;
   }
 
@@ -138,5 +124,5 @@ export default function Modal({
     </div>
   );
 
-  return containerRef.current ? createPortal(content, containerRef.current) : content;
+  return createPortal(content, container);
 }

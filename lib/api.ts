@@ -1,5 +1,6 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:8000";
 const API_PREFIX = "/api/v1";
+const DEFAULT_PUBLIC_REVALIDATE_SECONDS = 300;
 
 function buildUrl(path: string, params?: Record<string, string | number | boolean | undefined>) {
   const url = new URL(`${API_PREFIX}${path}`, API_BASE);
@@ -14,19 +15,32 @@ function buildUrl(path: string, params?: Record<string, string | number | boolea
 export interface ApiOptions extends RequestInit {
   params?: Record<string, string | number | boolean | undefined>;
   authToken?: string | null;
+  next?: {
+    revalidate?: number | false;
+    tags?: string[];
+  };
 }
 
 export async function apiFetch<TResponse>(path: string, options: ApiOptions = {}): Promise<TResponse> {
-  const { params, authToken, headers, ...rest } = options;
+  const { params, authToken, headers, next, cache, ...rest } = options;
   const url = buildUrl(path, params);
+  const method = (rest.method ?? "GET").toString().toUpperCase();
+  const isGet = method === "GET";
+
+  // Authenticated or non-GET requests should stay uncached; public GETs rely on ISR via `next.revalidate`.
+  const resolvedCache = cache ?? (authToken || !isGet ? "no-store" : undefined);
+  const resolvedNext = next ?? (!authToken && isGet ? { revalidate: DEFAULT_PUBLIC_REVALIDATE_SECONDS } : undefined);
+
   const response = await fetch(url, {
     ...rest,
+    method,
     headers: {
       "Content-Type": "application/json",
       ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
       ...(headers ?? {})
     },
-    cache: "no-store"
+    cache: resolvedCache,
+    ...(resolvedNext ? { next: resolvedNext } : {})
   });
 
   if (!response.ok) {
