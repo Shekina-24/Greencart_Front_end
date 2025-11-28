@@ -1,7 +1,8 @@
 import MarketingHome from "@/components/MarketingHome";
+import { getApiBase } from "@/lib/api";
 import type { AnalyticsSummary } from "@/lib/types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:8000";
+const API_BASE = getApiBase();
 const API_PREFIX = "/api/v1";
 
 interface AnalyticsSummaryRead {
@@ -20,7 +21,7 @@ interface AnalyticsSummaryRead {
 
 async function getAnalyticsSummary(): Promise<AnalyticsSummary | null> {
   try {
-    const response = await fetch(`${API_BASE}${API_PREFIX}/analytics/summary`, {
+    const response = await fetch(new URL(`${API_PREFIX}/analytics/summary`, API_BASE), {
       next: { revalidate: 300 }
     });
 
