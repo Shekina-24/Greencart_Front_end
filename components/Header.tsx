@@ -27,18 +27,18 @@ type NavLink = { label: string; href: string | { pathname: string; hash?: string
 
 const BASE_NAV_LINKS: NavLink[] = [
   { label: "Accueil", href: "/" },
-  { label: "Catalogue", href: "/catalogue" },
   { label: "Valeurs", href: "/valeurs" },
+  { label: "Catalogue", href: "/catalogue" },
   { label: "Producteurs", href: "/producteurs" },
   { label: "Aide", href: "/aide" }
 ];
 
 const ROLE_NAV_LINKS: Partial<Record<User["role"], NavLink[]>> = {
   consumer: [
-    { label: "Mon compte", href: "/compte" },
-    { label: "Mes avis", href: "/compte/avis" },
-    { label: "Mes commandes", href: "/compte/commandes" },
-    { label: "Mon impact", href: "/compte/impact" },
+    { label: "Compte", href: "/compte" },
+    { label: "Avis", href: "/compte/avis" },
+    { label: "Commandes", href: "/compte/commandes" },
+    { label: "Impact", href: "/compte/impact" },
     { label: "Aide", href: "/aide" }
   ],
   producer: [
@@ -80,6 +80,9 @@ export default function Header({
       return roleLinks;
     }
     if (user?.role === "producer") {
+      return roleLinks;
+    }
+    if (user?.role === "consumer") {
       return roleLinks;
     }
     return [...BASE_NAV_LINKS, ...roleLinks];

@@ -1,7 +1,9 @@
 {
+  "/produits/[slug]/page": "app/produits/[slug]/page.js",
+  "/checkout/page": "app/checkout/page.js",
+  "/compte/commandes/page": "app/compte/commandes/page.js",
+  "/compte/avis/page": "app/compte/avis/page.js",
+  "/landing/page": "app/landing/page.js",
   "/page": "app/page.js",
-  "/valeurs/page": "app/valeurs/page.js",
-  "/catalogue/page": "app/catalogue/page.js",
-  "/producteurs/page": "app/producteurs/page.js",
-  "/aide/page": "app/aide/page.js"
+  "/producteurs/produits/page": "app/producteurs/produits/page.js"
 }
