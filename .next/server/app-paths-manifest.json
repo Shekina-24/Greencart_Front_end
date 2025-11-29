@@ -1,4 +1,9 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js"
+  "/produits/[slug]/page": "app/produits/[slug]/page.js",
+  "/checkout/page": "app/checkout/page.js",
+  "/compte/commandes/page": "app/compte/commandes/page.js",
+  "/compte/avis/page": "app/compte/avis/page.js",
+  "/landing/page": "app/landing/page.js",
+  "/page": "app/page.js",
+  "/producteurs/produits/page": "app/producteurs/produits/page.js"
 }

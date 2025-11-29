@@ -942,7 +942,7 @@ button {
   transform: translateY(16px);
   opacity: 0.96;
   transition: transform 0.25s ease, opacity 0.25s ease;
-  max-height: min(95, 680px);
+  max-height: min(92vh, 780px);
   scrollbar-gutter: stable;
   overflow-y: auto;
 }
@@ -950,6 +950,14 @@ button {
 .modal.is-open .modal__panel {
   transform: translateY(0);
   opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .modal__panel {
+    width: 96vw;
+    padding: var(--space-4);
+    max-height: 92vh;
+  }
 }
 
 .modal__header {
