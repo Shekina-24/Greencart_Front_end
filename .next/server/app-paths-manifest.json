@@ -1,7 +1,7 @@
 {
-  "/admin/utilisateurs/page": "app/admin/utilisateurs/page.js",
-  "/producteurs/produits/page": "app/producteurs/produits/page.js",
-  "/producteurs/dashboard/page": "app/producteurs/dashboard/page.js",
+  "/page": "app/page.js",
+  "/valeurs/page": "app/valeurs/page.js",
+  "/catalogue/page": "app/catalogue/page.js",
   "/producteurs/page": "app/producteurs/page.js",
-  "/producteurs/recommandations/page": "app/producteurs/recommandations/page.js"
+  "/aide/page": "app/aide/page.js"
 }

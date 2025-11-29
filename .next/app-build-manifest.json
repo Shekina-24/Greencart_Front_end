@@ -1,14 +1,9 @@
 {
   "pages": {
-    "/producteurs/produits/page": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/producteurs/produits/page.js"
-    ],
-    "/producteurs/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/producteurs/layout.js"
+      "static/chunks/app/page.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -16,30 +11,40 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/producteurs/dashboard/page": [
+    "/catalogue/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/producteurs/dashboard/page.js"
+      "static/chunks/app/catalogue/page.js"
     ],
-    "/page": [
+    "/catalogue/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
+      "static/chunks/app/catalogue/layout.js"
+    ],
+    "/valeurs/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/valeurs/page.js"
     ],
     "/producteurs/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/producteurs/page.js"
     ],
-    "/producteurs/recommandations/page": [
+    "/producteurs/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/producteurs/recommandations/page.js"
+      "static/chunks/app/producteurs/layout.js"
     ],
-    "/admin/utilisateurs/page": [
+    "/aide/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/utilisateurs/page.js"
+      "static/chunks/app/aide/page.js"
+    ],
+    "/aide/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/aide/layout.js"
     ]
   }
 }
