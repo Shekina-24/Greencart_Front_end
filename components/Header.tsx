@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useMemo, useState } from "react";
 import { Menu, X } from "lucide-react";
@@ -26,8 +26,9 @@ const ROLE_LABEL: Record<User["role"], string> = {
 type NavLink = { label: string; href: string | { pathname: string; hash?: string } };
 
 const BASE_NAV_LINKS: NavLink[] = [
-  { label: "Home", href: "/" },
-
+  { label: "Accueil", href: "/" },
+  { label: "Catalogue", href: "/catalogue" },
+  { label: "Valeurs", href: "/valeurs" },
   { label: "Producteurs", href: "/producteurs" },
   { label: "Aide", href: "/aide" }
 ];
@@ -35,18 +36,23 @@ const BASE_NAV_LINKS: NavLink[] = [
 const ROLE_NAV_LINKS: Partial<Record<User["role"], NavLink[]>> = {
   consumer: [
     { label: "Mon compte", href: "/compte" },
-    { label: "Mes commandes", href: "/compte/commandes" },
     { label: "Mes avis", href: "/compte/avis" },
-    { label: "Impact perso", href: "/compte/impact" }
+    { label: "Mes commandes", href: "/compte/commandes" },
+    { label: "Mon impact", href: "/compte/impact" },
+    { label: "Aide", href: "/aide" }
   ],
   producer: [
-    { label: "Dashboard producteur", href: "/producteurs/dashboard" },
+    { label: "Dashboard", href: "/producteurs/dashboard" },
     { label: "Mes produits", href: "/producteurs/produits" },
-    { label: "Commandes", href: "/producteurs/commandes" }
+    { label: "Commandes", href: "/producteurs/commandes" },
+    { label: "Recommandations IA", href: "/producteurs/recommandations" },
+    { label: "Aide", href: "/aide" }
   ],
   admin: [
-    { label: "Admin analytics", href: "/admin/analytics" },
+    { label: "Analytics", href: "/admin/analytics" },
+    { label: "BI", href: "/admin/bi" },
     { label: "Données publiques", href: "/admin/public-data" },
+    { label: "Rapports", href: "/admin/reports" },
     { label: "Utilisateurs", href: "/admin/utilisateurs" }
   ]
 };
@@ -68,6 +74,16 @@ export default function Header({
 }: HeaderProps) {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const roleLinks = useMemo(() => (user && user.role ? ROLE_NAV_LINKS[user.role] ?? [] : []), [user]);
+
+  const navLinks = useMemo<NavLink[]>(() => {
+    if (user?.role === "admin") {
+      return roleLinks;
+    }
+    if (user?.role === "producer") {
+      return roleLinks;
+    }
+    return [...BASE_NAV_LINKS, ...roleLinks];
+  }, [user, roleLinks]);
 
   const toggleMenu = () => {
     setMenuOpen((current) => !current);
@@ -108,12 +124,7 @@ export default function Header({
             role="navigation"
             aria-label="Navigation principale"
           >
-            {BASE_NAV_LINKS.map((link) => (
-              <Link key={link.label} href={link.href} onClick={closeMenu}>
-                {link.label}
-              </Link>
-            ))}
-            {roleLinks.map((link) => (
+            {navLinks.map((link) => (
               <Link key={link.label} href={link.href} onClick={closeMenu}>
                 {link.label}
               </Link>
@@ -121,9 +132,11 @@ export default function Header({
           </nav>
 
           <div className="nav-actions">
-            <button className="btn btn--ghost" type="button" onClick={() => { onOpenCart(); closeMenu(); }}>
-              Mon panier ({cartCount})
-            </button>
+            {(user?.role === "consumer" || !user) ? (
+              <button className="btn btn--ghost" type="button" onClick={() => { onOpenCart(); closeMenu(); }}>
+                Mon panier ({cartCount})
+              </button>
+            ) : null}
             {user ? (
               <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "center", flexWrap: "wrap" }}>
                 <div className="badge badge--ghost">
