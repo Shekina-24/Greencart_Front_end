@@ -60,19 +60,10 @@ export const LANDING_PRODUCERS: LandingProducer[] = [
     description:
       "Boulangerie artisanale qui valorise les invendus de meuniers locaux pour creer des pains au levain d exception.",
     image:
-      "https://images.unsplash.com/photo-1514996937319-344454492b37?q=80&w=1600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1600891964092-4316c288032e?q=80&w=1600&auto=format&fit=crop",
     imageAlt: "Boulanger faconnant une pate sur un plan de travail farine."
   },
-  {
-    id: 3,
-    name: "Ruche de la Loire",
-    location: "Pays de la Loire, France",
-    description:
-      "Apiculteurs itinerants qui protegent la biodiversite locale et proposent un miel trace de fleurs sauvages.",
-    image:
-      "https://images.unsplash.com/photo-1470422862904-017c36dec1d8?q=80&w=1600&auto=format&fit=crop",
-    imageAlt: "Apiculteur inspectant un cadre de miel sous le soleil."
-  }
+  
 ];
 
 export const LANDING_METRICS: LandingMetric[] = [
