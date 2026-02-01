@@ -25,9 +25,9 @@ export default function ProducerBenefitsModal({ isOpen, onClose }: ProducerBenef
             <li><strong>Accès direct aux consommateurs</strong> - Sans intermédiaires, pour maximiser vos marges</li>
             <li><strong>Visibilité régionale</strong> - Atteignez des clients dans votre région qui recherchent des produits locaux</li>
             <li><strong>Réduction du gaspillage</strong> - Vendre directement signifie moins de pertes et de surproduction</li>
-            <li><strong>Suivi d'impact</strong> - Suiv l&apos;impact carbone de vos livraisons et communiquez vos efforts durables</li>
+            <li><strong>Suivi d&apos;impact</strong> - Suiv l&apos;impact carbone de vos livraisons et communiquez vos efforts durables</li>
             <li><strong>Outils de gestion</strong> - Tableau de bord complet pour gérer vos produits, commandes et recommandations</li>
-            <li><strong>Communauté d'entrepreneurs</strong> - Connectez-vous avec d'autres producteurs partenaires</li>
+            <li><strong>Communauté d&apos;entrepreneurs</strong> - Connectez-vous avec d&apos;autres producteurs partenaires</li>
           </ul>
         </div>
 
