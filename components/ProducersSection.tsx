@@ -1,7 +1,7 @@
 ﻿interface ProducersSectionProps {
   onBecomeProducer: () => void;
 }
-
+import BecomeProducerButton from "@/components/BecomeProducerButton";
 export default function ProducersSection({ onBecomeProducer }: ProducersSectionProps) {
   return (
     <section id="producteurs" className="section">
