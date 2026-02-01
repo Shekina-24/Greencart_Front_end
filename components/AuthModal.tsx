@@ -60,7 +60,7 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
 
     try {
       if (mode === "login") {
-        const res = await fetch("/api/auth/login", {
+        const res = await fetch("/api/v1/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -80,7 +80,7 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
       } else {
        console.log("Registering user:", formState);
 
-          const res = await fetch("/api/auth/register", {
+          const res = await fetch("/api/v1/auth/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
