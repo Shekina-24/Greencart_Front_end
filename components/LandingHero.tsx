@@ -1,10 +1,15 @@
+'use client';
+
 import Link from "next/link";
+import { useState } from "react";
+import ProducerBenefitsModal from "./ProducerBenefitsModal";
 
 interface LandingHeroProps {
   onOpenRegister: () => void;
 }
 
 export default function LandingHero({ onOpenRegister }: LandingHeroProps) {
+  const [isProducerModalOpen, setIsProducerModalOpen] = useState(false);
   return (
     <section className="landing-hero" aria-labelledby="landing-hero-title">
       <div className="landing-hero__media" role="presentation" />
@@ -22,13 +27,21 @@ export default function LandingHero({ onOpenRegister }: LandingHeroProps) {
             <Link className="btn btn--landing-primary" href="/catalogue">
               Explorer le catalogue
             </Link>
-            <button className="btn btn--landing-secondary" type="button" onClick={onOpenRegister}>
+            <button
+              className="btn btn--landing-secondary"
+              type="button"
+              onClick={() => setIsProducerModalOpen(true)}
+            >
               Devenir producteur partenaire
             </button>
           </div>
         </div>
       </div>
+
+      <ProducerBenefitsModal
+        isOpen={isProducerModalOpen}
+        onClose={() => setIsProducerModalOpen(false)}
+      />
     </section>
   );
 }
-
