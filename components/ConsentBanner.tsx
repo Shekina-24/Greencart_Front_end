@@ -25,6 +25,9 @@ export default function ConsentBanner() {
         <p className="muted" style={{ margin: 0 }}>
           Nous utilisons des cookies d&apos;analyse pour comprendre l&apos;usage et améliorer GreenCart. Vous pouvez accepter ou refuser.
         </p>
+        <p>
+         <a href="/cgu">Mentions Légales</a> 
+        </p>
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
           <button className="btn" type="button" onClick={() => setConsent('denied')}>Refuser</button>
           <button className="btn btn--primary" type="button" onClick={() => setConsent('granted')}>Accepter</button>

@@ -65,7 +65,7 @@ export const LANDING_PRODUCERS: LandingProducer[] = [
   {
     id: 3,
     name: "Ruche de la Loire",
-    location: "Pays de la Loire, France",
+    location: " Pays de la Loire, France",
     description:
       "Apiculteurs itinerants qui protegent la biodiversite locale et proposent un miel trace de fleurs sauvages.",
     image:

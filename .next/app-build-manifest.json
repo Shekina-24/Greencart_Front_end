@@ -11,10 +11,15 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/produits/[slug]/page": [
+    "/cgu/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/produits/[slug]/page.js"
+      "static/chunks/app/cgu/page.js"
+    ],
+    "/cgv/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/cgv/page.js"
     ]
   }
 }

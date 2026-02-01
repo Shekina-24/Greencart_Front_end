@@ -68,10 +68,10 @@ export default function Footer() {
           <strong>Legal</strong>
           <ul className="footer-links">
             <li>
-              <a href="#">Mentions legales</a>
+              <a href="/cgv">Mentions legales</a>
             </li>
             <li>
-              <a href="#">Conditions d&apos;utilisation</a>
+              <a href="/cgu">Conditions d&apos;utilisation</a>
             </li>
             <li>
               <a href="#">Politique de confidentialite</a>

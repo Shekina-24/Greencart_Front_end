@@ -1125,6 +1125,51 @@ button {
   font-size: var(--fs-small);
 }
 
+/* Legal pages helpers */
+.legal-page {
+  padding-block: var(--space-12);
+}
+
+.legal-header {
+  display: grid;
+  grid-gap: var(--space-3);
+  gap: var(--space-3);
+}
+
+.legal-title {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-heading);
+  margin: 0;
+}
+
+.legal-subtitle {
+  color: var(--gc-muted);
+}
+
+.legal-toc a:hover {
+  color: var(--gc-primary);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.legal-list {
+  list-style: disc;
+  padding-left: 1.25rem;
+  display: grid;
+  grid-gap: var(--space-2);
+  gap: var(--space-2);
+}
+
+.legal-list li {
+  color: var(--gc-text);
+}
+
+.legal-hr {
+  border: none;
+  border-top: 1px solid var(--gc-border);
+  margin-block: var(--space-6);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
