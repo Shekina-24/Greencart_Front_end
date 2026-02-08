@@ -28,7 +28,7 @@ export default function LandingHero({ onOpenRegister }: LandingHeroProps) {
               Explorer le catalogue
             </Link>
             <button
-              className="btn btn--landing-secondary"
+              className="btn btn--primary"
               type="button"
               onClick={() => setIsProducerModalOpen(true)}
             >

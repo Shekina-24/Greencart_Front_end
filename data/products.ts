@@ -93,7 +93,7 @@ export const PRODUCTS: Product[] = [
     dlcDays: 10,
     unit: "Unite 250 g",
     image:
-      "https://images.unsplash.com/photo-1505575972945-2804b5c35f33?q=80&w=1200&auto=format&fit=crop",
+      "/images/jean.jpg",
     description:
       "Fromage de chevre demi-sec affine 10 jours. Gout franc, lait issu d'un elevage extensif."
   }

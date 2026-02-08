@@ -74,7 +74,7 @@ export default function CGUPage() {
             <h2>1. Définitions</h2>
             <ul className="legal-list">
               <li>
-                <strong>Site</strong> : la plateforme accessible via <em>[URL]</em>.
+                <strong>Site</strong> : la plateforme accessible via <em>https://greencartfrontend-six.vercel.app</em>.
               </li>
               <li>
                 <strong>Service</strong> : fonctionnalités proposées (compte, catalogue,
@@ -119,7 +119,7 @@ export default function CGUPage() {
               <li>Vous êtes responsable de vos identifiants et de leur confidentialité.</li>
               <li>Vous vous engagez à fournir des informations exactes et à les maintenir à jour.</li>
               <li>
-                En cas de suspicion d’accès frauduleux : contactez <em>[support@email]</em>.
+                En cas de suspicion d’accès frauduleux : contactez <em>contact@greencart.fr</em>.
               </li>
             </ul>
           </div>
@@ -153,7 +153,7 @@ export default function CGUPage() {
             <h2>7. Données personnelles</h2>
             <p>
               Le traitement des données personnelles est détaillé dans la politique de confidentialité.
-              Droits (accès, rectification, suppression, opposition) : <em>[dpo@email]</em>.
+              Droits (accès, rectification, suppression, opposition) : <em>contact@greencart.fr</em>.
             </p>
           </div>
 
@@ -182,8 +182,10 @@ export default function CGUPage() {
           <div className="card" id="droit">
             <h2>10. Droit applicable & litiges</h2>
             <p>
-              Droit applicable : <em>[France]</em>. En cas de litige : tentative amiable, puis
-              juridiction compétente : <em>[Ville]</em>.
+              Les présentes Conditions Générales de Vente sont soumises au droit français.
+              En cas de litige, le Client et le Vendeur s’engagent à rechercher en priorité
+              une solution amiable. À défaut d’accord amiable, le litige sera porté devant
+              les juridictions compétentes de <em>Paris</em>.
             </p>
           </div>
 
@@ -192,9 +194,9 @@ export default function CGUPage() {
           <div className="card" id="contact">
             <h2>11. Contact</h2>
             <ul className="legal-list">
-              <li>Éditeur : <em>[Nom / Société]</em></li>
-              <li>Adresse : <em>[Adresse]</em></li>
-              <li>Email : <em>[support@email]</em></li>
+              <li>Éditeur : <em>Greencart</em></li>
+              <li>Adresse : <em>12 rue des Circuits Courts, 75010 Paris, France</em></li>
+              <li>Email : <em>contact@greencart.fr</em></li>
             </ul>
           </div>
 

@@ -51,8 +51,11 @@ export default function CGVPage() {
           <div className="card" id="champ">
             <h2>1. Champ d’application</h2>
             <p>
-              Les présentes CGV s’appliquent à toute commande passée sur <em>[URL]</em>
-              entre <em>[Nom société]</em> (“Vendeur”) et un consommateur (“Client”).
+              Les présentes Conditions Générales de Vente (CGV) s’appliquent à toute commande
+              passée sur le site internet <em>Greencart</em> (accessible à l’adresse{" "}
+              <em>https://greencartfrontend-six.vercel.app</em>), entre la société{" "}
+              <em>Greencart</em>, ci-après dénommée le « Vendeur », et toute personne physique
+              agissant en qualité de consommateur, ci-après dénommée le « Client ».
             </p>
           </div>
 
@@ -71,10 +74,17 @@ export default function CGVPage() {
           <div className="card" id="prix">
             <h2>3. Prix</h2>
             <ul className="legal-list">
-              <li>Prix en <em>[EUR]</em>, TTC, affichés avant validation.</li>
-              <li>Frais (livraison/service) indiqués avant paiement.</li>
+              <li>Les prix des produits sont indiqués en <em>euros (€)</em>, toutes taxes
+                  comprises (TTC), et affichés avant la validation de la commande par le Client.
+              </li>
+              <li>Les éventuels frais de livraison ou de service sont indiqués avant le paiement
+                  et font l’objet d’un récapitulatif présenté au Client avant la validation
+                  définitive de la commande.
+              </li>
               <li>
-                En cas d’erreur manifeste, le Vendeur peut annuler la commande après information.
+                  En cas d’erreur manifeste de prix (prix dérisoire, erreur typographique ou
+                  technique), le Vendeur se réserve le droit d’annuler la commande, après en avoir
+                  informé le Client dans les meilleurs délais.
               </li>
             </ul>
           </div>
@@ -95,8 +105,11 @@ export default function CGVPage() {
           <div className="card" id="paiement">
             <h2>5. Paiement</h2>
             <p>
-              Paiement par <em>[Stripe / carte bancaire / PayPal]</em>. La commande est définitive
-              après validation du paiement.
+              Le paiement des commandes s’effectue en ligne par carte bancaire via une solution
+              de paiement sécurisée fournie par <em>Stripe</em> ou par tout autre moyen de
+              paiement proposé sur le site au moment de la commande. La commande est considérée
+              comme définitive uniquement après la validation complète du paiement par
+              l’organisme de paiement.
             </p>
           </div>
 
@@ -105,11 +118,20 @@ export default function CGVPage() {
           <div className="card" id="livraison">
             <h2>6. Livraison / retrait</h2>
             <ul className="legal-list">
-              <li>Zone : <em>[Zone]</em></li>
-              <li>Modalité : <em>[Livraison / Retrait / Les deux]</em></li>
-              <li>Délais indicatifs : <em>[X]</em></li>
+              <li>Les produits proposés sur le site Greencart sont disponibles en livraison à
+                  domicile et/ou en retrait auprès des producteurs partenaires, selon les options
+                  proposées au moment de la commande.
+              </li>
+              <li>Les zones de livraison ainsi que les modalités de retrait sont précisées lors du
+                  processus de commande et peuvent varier en fonction de la localisation du
+                  producteur et du Client.
+              </li>
+              <li>Les délais de livraison ou de mise à disposition sont indiqués à titre indicatif
+                  de la commande. Greencart s’efforce de respecter les délais annoncés.
+              </li>
               <li>
-                En cas de retard significatif, le Client peut demander l’annulation selon la loi applicable.
+                En cas de retard significatif non justifié, le Client peut demander l’annulation
+                de la commande conformément aux dispositions légales en vigueur.
               </li>
             </ul>
           </div>
@@ -130,8 +152,12 @@ export default function CGVPage() {
           <div className="card" id="remboursement">
             <h2>8. Remboursements</h2>
             <ul className="legal-list">
-              <li>Remboursement via le même moyen de paiement, sous <em>[X]</em> jours.</li>
-              <li>Conditions : <em>[produits non consommés / non ouverts / etc.]</em></li>
+              <li>En cas de remboursement accepté, celui-ci est effectué via le même moyen de
+                  paiement que celui utilisé lors de la commande, sauf accord exprès du Client.
+              </li>
+              <li>Les produits concernés doivent être non consommés, non ouverts, dans leur état
+                  d’origine et accompagnés, le cas échéant, de leur emballage d’origine.
+              </li>
             </ul>
           </div>
 
@@ -140,8 +166,10 @@ export default function CGVPage() {
           <div className="card" id="garanties">
             <h2>9. Garanties</h2>
             <p>
-              Les garanties légales s’appliquent (conformité, vices cachés) selon la réglementation.
-              Contact : <em>[support@email]</em>.
+                Les produits vendus sur le site Greencart bénéficient des garanties légales
+                prévues par la réglementation en vigueur, notamment la garantie légale de
+                conformité et la garantie contre les vices cachés.
+                Contact : <em>contact@greencart.fr</em>.
             </p>
           </div>
 
@@ -150,8 +178,12 @@ export default function CGVPage() {
           <div className="card" id="litiges">
             <h2>10. Litiges / médiation</h2>
             <p>
-              En cas de litige : contact support, tentative amiable, puis médiation/tribunal compétent :{" "}
-              <em>[Ville]</em>.
+              En cas de litige, le Client est invité à contacter en priorité le service
+              client de <em>Greencart</em> afin de rechercher une solution amiable.
+              À défaut d’accord amiable, le Client peut recourir gratuitement à un médiateur
+              de la consommation, conformément aux articles L.612-1 et suivants du Code de la
+              consommation. À défaut de médiation ou en cas d’échec de celle-ci, tout litige
+              sera soumis aux tribunaux compétents de <em>Paris</em>.
             </p>
           </div>
 
@@ -160,12 +192,21 @@ export default function CGVPage() {
           <div className="card" id="identite">
             <h2>11. Identité du vendeur</h2>
             <ul className="legal-list">
-              <li>Vendeur : <em>[Nom / Société]</em></li>
-              <li>Adresse : <em>[Adresse]</em></li>
-              <li>Email : <em>[support@email]</em></li>
-              <li>SIRET : <em>[SIRET]</em></li>
+              <li>
+                Vendeur : <em>Greencart (SAS)</em>
+              </li>
+              <li>
+                Adresse : <em>12 rue des Circuits Courts, 75010 Paris, France</em>
+              </li>
+              <li>
+                Email : <em>contact@greencart.fr</em>
+              </li>
+              <li>
+                SIRET : <em>912 345 678 00019</em>
+              </li>
             </ul>
           </div>
+
 
           <div className="banner">
             <p className="muted">Besoin des CGU ?</p>
