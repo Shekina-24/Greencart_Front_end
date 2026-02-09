@@ -13,9 +13,9 @@ pnpm-debug.log*
 
 # env files (do NOT commit secrets)
 .env
-.env.*
+.env.local
 !.env.example
-
+.env.production
 # OS / editor
 .DS_Store
 .vscode/
