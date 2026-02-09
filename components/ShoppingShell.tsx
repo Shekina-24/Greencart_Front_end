@@ -80,10 +80,8 @@ export default function ShoppingShell({ children, initialFilters, requireAuth = 
         onOpenCart={experience.openCart}
         onOpenLogin={() => experience.openAuthModal("login")}
         onOpenRegister={() => experience.openAuthModal("register")}
-        onLogout={logout}
         isScrolled={isScrolled}
-        user={user}
-        isAuthenticating={isAuthenticating}
+        
       />
 
       {isAuthenticating ? (

@@ -7,6 +7,10 @@ import Link from "next/link";
 
 import { apiFetch } from "@/lib/api";
 
+import { useAuth } from "@/hooks/useAuth";
+
+
+
 interface CurrentUser {
   _id: string;
   email: string;
@@ -68,6 +72,8 @@ export default function Header({
 }: HeaderProps) {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
+  const { user, logout, isAuthenticating } = useAuth();
+
 
   const roleLinks = useMemo(
     () => (currentUser?.role ? ROLE_NAV_LINKS[currentUser.role] ?? [] : []),
