@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, type FormEvent } from "react";
-import { useAuth } from "@/hooks/useAuth";
 import type { UserRole } from "@/lib/types";
 import Modal from "./Modal";
 
@@ -30,11 +29,10 @@ const INITIAL_STATE: AuthFormState = {
   region: "",
   role: "consumer",
   consentNewsletter: false,
-  consentAnalytics: false
+  consentAnalytics: false,
 };
 
 export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
-  const { login, register } = useAuth();
   const [formState, setFormState] = useState<AuthFormState>(INITIAL_STATE);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,7 +41,7 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
     if (isOpen) {
       setFormState((current) => ({
         ...INITIAL_STATE,
-        role: current.role
+        role: current.role,
       }));
       setError(null);
       setIsSubmitting(false);
@@ -55,57 +53,78 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
     setIsSubmitting(true);
     setError(null);
 
-    const { email, password, firstName, lastName, region, role, consentAnalytics, consentNewsletter } =
-      formState;
+    const {
+      email,
+      password,
+      firstName,
+      lastName,
+      region,
+      role,
+      consentNewsletter,
+      consentAnalytics,
+    } = formState;
+
+    const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+
+    if (!API_BASE) {
+      setError("API non configurée (NEXT_PUBLIC_API_BASE manquante).");
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       if (mode === "login") {
-        const res = await fetch("/api/v1/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+        const res = await fetch(`${API_BASE}/api/v1/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
 
-      const data = await res.json();
+        const data = await res.json().catch(() => null);
 
-      if (!res.ok) {
-        console.log(data.error || "Erreur de connexion");
-        return;
-      }
+        if (!res.ok) {
+          setError(data?.detail || data?.error || "Erreur de connexion");
+          return;
+        }
 
-      localStorage.setItem("token", data.token);
-      console.log("Connexion réussie !");
-      window.location.href = "/";
+        const token = data?.access_token ?? data?.token;
 
+        if (!token) {
+          setError("Connexion réussie mais token manquant.");
+          return;
+        }
+
+        localStorage.setItem("token", token);
+        window.location.href = "/";
       } else {
-       console.log("Registering user:", formState);
-
-          const res = await fetch("/api/v1/auth/register", {
+        const res = await fetch(`${API_BASE}/api/v1/auth/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             email,
             password,
-            firstName,
-            lastName,
+            first_name: firstName,
+            last_name: lastName,
             region,
             role,
-            consentNewsletter,
-            consentAnalytics
+            consent_newsletter: consentNewsletter,
+            consent_analytics: consentAnalytics,
           }),
         });
 
-        const data = await res.json();
+        const data = await res.json().catch(() => null);
+
         if (!res.ok) {
-          console.log(data.error || "Erreur à l'inscription");
+          setError(data?.detail || data?.error || "Erreur à l'inscription");
           return;
         }
 
-        console.log("Inscription réussie", data);
         window.location.href = "/";
-
       }
+
       onClose();
+    } catch (err) {
+      setError("Erreur réseau. Veuillez réessayer.");
     } finally {
       setIsSubmitting(false);
     }
@@ -114,7 +133,7 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
   const updateField = (field: keyof AuthFormState, value: string | boolean) => {
     setFormState((current) => ({
       ...current,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -129,7 +148,7 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
       title={mode === "login" ? "Se connecter" : "Creer un compte"}
     >
       <form className="grid" onSubmit={handleSubmit} style={{ gap: "var(--space-3)" }}>
-        {mode === "register" ? (
+        {mode === "register" && (
           <>
             <div className="grid" style={{ gap: "var(--space-2)" }}>
               <label className="input-label">
@@ -151,6 +170,7 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
                 />
               </label>
             </div>
+
             <label className="input-label">
               Region
               <input
@@ -160,6 +180,7 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
                 onChange={(event) => updateField("region", event.target.value)}
               />
             </label>
+
             <label className="input-label">
               Type de compte
               <select
@@ -173,7 +194,7 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
               </select>
             </label>
           </>
-        ) : null}
+        )}
 
         <label className="input-label">
           Email
@@ -183,9 +204,9 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
             value={formState.email}
             onChange={(event) => updateField("email", event.target.value)}
             required
-            autoComplete="email"
           />
         </label>
+
         <label className="input-label">
           Mot de passe
           <input
@@ -195,11 +216,10 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
             onChange={(event) => updateField("password", event.target.value)}
             required
             minLength={8}
-            autoComplete={mode === "login" ? "current-password" : "new-password"}
           />
         </label>
 
-        {mode === "register" ? (
+        {mode === "register" && (
           <div className="grid" style={{ gap: "var(--space-2)" }}>
             <label className="checkbox">
               <input
@@ -209,6 +229,7 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
               />
               <span>Recevoir les actualites GreenCart</span>
             </label>
+
             <label className="checkbox">
               <input
                 type="checkbox"
@@ -218,13 +239,13 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
               <span>Partager mes donnees d&apos;usage pour le suivi d&apos;impact</span>
             </label>
           </div>
-        ) : null}
+        )}
 
-        {error ? (
-          <p style={{ color: "var(--danger-500, #c43d3d)", margin: 0, fontSize: "var(--fs-small)" }}>
+        {error && (
+          <p style={{ color: "#c43d3d", margin: 0, fontSize: "14px" }}>
             {error}
           </p>
-        ) : null}
+        )}
 
         <button className="btn btn--primary" type="submit" disabled={isSubmitting}>
           {isSubmitting
