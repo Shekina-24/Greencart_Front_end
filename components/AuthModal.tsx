@@ -66,6 +66,8 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
 
     const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
+    console.log("API_BASE =", API_BASE); // ← ICI
+
     if (!API_BASE) {
       setError("API non configurée (NEXT_PUBLIC_API_BASE manquante).");
       setIsSubmitting(false);
