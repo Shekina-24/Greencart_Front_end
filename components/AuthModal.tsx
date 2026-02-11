@@ -59,28 +59,39 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
       formState;
 
     try {
-      if (mode === "login") {
-        const res = await fetch("/api/v1/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        console.log(data.error || "Erreur de connexion");
+      if (!API_BASE) {
+        setError("NEXT_PUBLIC_API_URL manquant (Vercel env var).");
         return;
       }
 
-      localStorage.setItem("token", data.token);
-      console.log("Connexion réussie !");
-      window.location.href = "/";
+      if (mode === "login") {
+        const res = await fetch(`${API_BASE}/api/v1/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
 
+        const data = await res.json().catch(() => null);
+
+        if (!res.ok) {
+          setError((data && (data.error || data.detail)) || "Erreur de connexion");
+          return;
+        }
+
+        // adapte selon ton backend: token / access_token
+        const token = data?.token ?? data?.access_token;
+        if (token) {
+          localStorage.setItem("token", token);
+        }
+
+        console.log("Connexion réussie !");
+        window.location.href = "/";
       } else {
-       console.log("Registering user:", formState);
+        console.log("Registering user:", formState);
 
-          const res = await fetch("/api/v1/auth/register", {
+        const res = await fetch(`${API_BASE}/api/v1/auth/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -91,21 +102,25 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
             region,
             role,
             consentNewsletter,
-            consentAnalytics
+            consentAnalytics,
           }),
         });
 
-        const data = await res.json();
+        const data = await res.json().catch(() => null);
+
         if (!res.ok) {
-          console.log(data.error || "Erreur à l'inscription");
+          setError((data && (data.error || data.detail)) || "Erreur à l'inscription");
           return;
         }
 
         console.log("Inscription réussie", data);
         window.location.href = "/";
-
       }
+
       onClose();
+    } catch (e) {
+      setError("Erreur réseau / backend indisponible.");
+      console.error(e);
     } finally {
       setIsSubmitting(false);
     }
