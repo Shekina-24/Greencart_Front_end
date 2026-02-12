@@ -105,13 +105,18 @@ export default function Header({
     const fetchUser = async () => {
       try {
         // ✅ appelle FastAPI: /api/v1/auth/me (via apiFetch)
-        const data = await apiFetch<{ user: CurrentUser }>("/auth/me", {
+        const data = await apiFetch<any>("/auth/me", {
           authToken: token,
           method: "GET",
         });
 
         if (cancelled) return;
-        setCurrentUser(data.user);
+        const u = data?.user ?? data;
+        setCurrentUser({
+          ...u,
+          firstName: u.firstName ?? u.first_name,
+          lastName: u.lastName ?? u.last_name,
+        });
       } catch (err: any) {
         // Si token invalide/expiré -> on nettoie
         const status = typeof err?.status === "number" ? err.status : null;
