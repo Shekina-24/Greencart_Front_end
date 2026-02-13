@@ -22,7 +22,7 @@ interface ShoppingShellProps {
 export default function ShoppingShell({ children, initialFilters, requireAuth = false, requiredRole }: ShoppingShellProps) {
   const experience = useShoppingExperience(initialFilters);
   const router = useRouter();
-  const { user, logout, isAuthenticating } = useAuth();
+  const { user, isAuthenticating } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const { authModal, closeAuthModal } = experience;
 
@@ -81,7 +81,6 @@ export default function ShoppingShell({ children, initialFilters, requireAuth = 
         onOpenLogin={() => experience.openAuthModal("login")}
         onOpenRegister={() => experience.openAuthModal("register")}
         isScrolled={isScrolled}
-        
       />
 
       {isAuthenticating ? (
@@ -128,7 +127,11 @@ export default function ShoppingShell({ children, initialFilters, requireAuth = 
         onEmpty={experience.emptyCart}
         onCheckout={() => {
           try {
-            const items = experience.cartItems.map((i) => ({ id: i.id, quantity: i.quantity, priceCents: i.priceCents ?? null }));
+            const items = experience.cartItems.map((i) => ({
+              id: i.id,
+              quantity: i.quantity,
+              priceCents: i.priceCents ?? null,
+            }));
             const totalCents = Math.round(experience.cartTotals.totalPrice * 100);
             trackBeginCheckout({ totalCents, items });
           } catch {}
@@ -151,7 +154,7 @@ export default function ShoppingShell({ children, initialFilters, requireAuth = 
 
       <AuthModal
         mode={authModal === "register" ? "register" : "login"}
-        isOpen={authModal !== null && !user}
+        isOpen={authModal !== null}
         onClose={closeAuthModal}
       />
     </>

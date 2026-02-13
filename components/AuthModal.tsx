@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import type { UserRole } from "@/lib/types";
+import { useAuth } from "@/hooks/useAuth";
 import Modal from "./Modal";
 
 interface AuthModalProps {
@@ -33,6 +34,7 @@ const INITIAL_STATE: AuthFormState = {
 };
 
 export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
+  const { login, register } = useAuth();
   const [formState, setFormState] = useState<AuthFormState>(INITIAL_STATE);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -64,72 +66,30 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
       consentAnalytics,
     } = formState;
 
-    const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+    let result: { success: boolean; error?: string };
 
-    console.log("API_BASE =", API_BASE); // ← ICI
-
-    if (!API_BASE) {
-      setError("API non configurée (NEXT_PUBLIC_API_BASE manquante).");
-      setIsSubmitting(false);
-      return;
+    if (mode === "login") {
+      result = await login({ email, password });
+    } else {
+      result = await register({
+        email,
+        password,
+        firstName,
+        lastName,
+        region,
+        role,
+        consentNewsletter,
+        consentAnalytics,
+      });
     }
 
-    try {
-      if (mode === "login") {
-        const res = await fetch(`${API_BASE}/api/v1/auth/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
-
-        const data = await res.json().catch(() => null);
-
-        if (!res.ok) {
-          setError(data?.detail || data?.error || "Erreur de connexion");
-          return;
-        }
-
-        const token = data?.access_token ?? data?.token;
-
-        if (!token) {
-          setError("Connexion réussie mais token manquant.");
-          return;
-        }
-
-        localStorage.setItem("token", token);
-        window.location.href = "/";
-      } else {
-        const res = await fetch(`${API_BASE}/api/v1/auth/register`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email,
-            password,
-            first_name: firstName,
-            last_name: lastName,
-            region,
-            role,
-            consent_newsletter: consentNewsletter,
-            consent_analytics: consentAnalytics,
-          }),
-        });
-
-        const data = await res.json().catch(() => null);
-
-        if (!res.ok) {
-          setError(data?.detail || data?.error || "Erreur à l'inscription");
-          return;
-        }
-
-        window.location.href = "/";
-      }
-
+    if (!result.success) {
+      setError(result.error ?? "Une erreur est survenue. Veuillez réessayer.");
+    } else {
       onClose();
-    } catch (err) {
-      setError("Erreur réseau. Veuillez réessayer.");
-    } finally {
-      setIsSubmitting(false);
     }
+
+    setIsSubmitting(false);
   };
 
   const updateField = (field: keyof AuthFormState, value: string | boolean) => {
@@ -147,17 +107,17 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={mode === "login" ? "Se connecter" : "Creer un compte"}
+      title={mode === "login" ? "Se connecter" : "Créer un compte"}
     >
       <form className="grid" onSubmit={handleSubmit} style={{ gap: "var(--space-3)" }}>
         {mode === "register" && (
           <>
             <div className="grid" style={{ gap: "var(--space-2)" }}>
               <label className="input-label">
-                Prenom
+                Prénom
                 <input
                   className="input"
-                  placeholder="Prenom"
+                  placeholder="Prénom"
                   value={formState.firstName}
                   onChange={(event) => updateField("firstName", event.target.value)}
                 />
@@ -174,10 +134,10 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
             </div>
 
             <label className="input-label">
-              Region
+              Région
               <input
                 className="input"
-                placeholder="Region (ex: Ile-de-France)"
+                placeholder="Région (ex: Ile-de-France)"
                 value={formState.region}
                 onChange={(event) => updateField("region", event.target.value)}
               />
@@ -229,7 +189,7 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
                 checked={formState.consentNewsletter}
                 onChange={(event) => updateField("consentNewsletter", event.target.checked)}
               />
-              <span>Recevoir les actualites GreenCart</span>
+              <span>Recevoir les actualités GreenCart</span>
             </label>
 
             <label className="checkbox">
@@ -238,7 +198,7 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
                 checked={formState.consentAnalytics}
                 onChange={(event) => updateField("consentAnalytics", event.target.checked)}
               />
-              <span>Partager mes donnees d&apos;usage pour le suivi d&apos;impact</span>
+              <span>Partager mes données d&apos;usage pour le suivi d&apos;impact</span>
             </label>
           </div>
         )}
@@ -254,7 +214,7 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
             ? "Veuillez patienter..."
             : mode === "login"
             ? "Se connecter"
-            : "Creer mon compte"}
+            : "Créer mon compte"}
         </button>
       </form>
     </Modal>

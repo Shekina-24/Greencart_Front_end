@@ -1,26 +1,10 @@
 'use client';
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-
-import { apiFetch } from "@/lib/api";
-
 import { useAuth } from "@/hooks/useAuth";
-
-
-
-interface CurrentUser {
-  _id: string;
-  email: string;
-  firstName?: string;
-  lastName?: string;
-  region?: string;
-  role?: "consumer" | "producer" | "admin" | string;
-  consentNewsletter?: boolean;
-  consentAnalytics?: boolean;
-}
 
 interface HeaderProps {
   cartCount: number;
@@ -71,9 +55,7 @@ export default function Header({
   isScrolled,
 }: HeaderProps) {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
-  const { user, logout, isAuthenticating } = useAuth();
-
+  const { user: currentUser, logout } = useAuth();
 
   const roleLinks = useMemo(
     () => (currentUser?.role ? ROLE_NAV_LINKS[currentUser.role] ?? [] : []),
@@ -81,7 +63,6 @@ export default function Header({
   );
 
   const navLinks = useMemo<NavLink[]>(() => {
-    // si connecté, on montre la nav du rôle
     if (currentUser?.role) return roleLinks;
     return BASE_NAV_LINKS;
   }, [currentUser, roleLinks]);
@@ -90,52 +71,9 @@ export default function Header({
   const closeMenu = () => setMenuOpen(false);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    // optionnel : reset state pour éviter un flash
-    setCurrentUser(null);
-    window.location.href = "/";
+    logout();
+    closeMenu();
   };
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    const fetchUser = async () => {
-      try {
-        // ✅ appelle FastAPI: /api/v1/auth/me (via apiFetch)
-        const data = await apiFetch<any>("/auth/me", {
-          authToken: token,
-          method: "GET",
-        });
-
-        if (cancelled) return;
-        const u = data?.user ?? data;
-        setCurrentUser({
-          ...u,
-          firstName: u.firstName ?? u.first_name,
-          lastName: u.lastName ?? u.last_name,
-        });
-      } catch (err: any) {
-        // Si token invalide/expiré -> on nettoie
-        const status = typeof err?.status === "number" ? err.status : null;
-        if (status === 401 || status === 403) {
-          localStorage.removeItem("token");
-        }
-        // On ne spam pas la console si c'est juste un token expiré
-        if (status !== 401 && status !== 403) {
-          console.error("Erreur récupération utilisateur :", err);
-        }
-      }
-    };
-
-    fetchUser();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   return (
     <header className={`site-header${isScrolled ? " is-scrolled" : ""}`}>
