@@ -2,7 +2,6 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import type { UserRole } from "@/lib/types";
-import { useAuth } from "@/hooks/useAuth";
 import Modal from "./Modal";
 
 interface AuthModalProps {
@@ -38,13 +37,11 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { login, register } = useAuth();
-
   useEffect(() => {
     if (isOpen) {
       setFormState((current) => ({
         ...INITIAL_STATE,
-        role: current.role, // conserve le choix du rôle si tu switches login/register
+        role: current.role,
       }));
       setError(null);
       setIsSubmitting(false);
@@ -53,8 +50,6 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (isSubmitting) return;
-
     setIsSubmitting(true);
     setError(null);
 
@@ -69,38 +64,68 @@ export default function AuthModal({ mode, isOpen, onClose }: AuthModalProps) {
       consentAnalytics,
     } = formState;
 
+    const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+
+    console.log("API_BASE =", API_BASE); // ← ICI
+
+    if (!API_BASE) {
+      setError("API non configurée (NEXT_PUBLIC_API_BASE manquante).");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       if (mode === "login") {
-        const result = await login({ email, password });
-        if (!result.success) {
-          setError(result.error || "Erreur de connexion");
+        const res = await fetch(`${API_BASE}/api/v1/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await res.json().catch(() => null);
+
+        if (!res.ok) {
+          setError(data?.detail || data?.error || "Erreur de connexion");
           return;
         }
 
-        onClose();
-        window.location.href = "/dashboard";
-        return;
-      }
+        const token = data?.access_token ?? data?.token;
 
-      const result = await register({
-        email,
-        password,
-        role,
-        firstName,
-        lastName,
-        region,
-        consentNewsletter,
-        consentAnalytics,
-      });
+        if (!token) {
+          setError("Connexion réussie mais token manquant.");
+          return;
+        }
 
-      if (!result.success) {
-        setError(result.error || "Erreur à l'inscription");
-        return;
+        localStorage.setItem("token", token);
+        window.location.href = "/";
+      } else {
+        const res = await fetch(`${API_BASE}/api/v1/auth/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            password,
+            first_name: firstName,
+            last_name: lastName,
+            region,
+            role,
+            consent_newsletter: consentNewsletter,
+            consent_analytics: consentAnalytics,
+          }),
+        });
+
+        const data = await res.json().catch(() => null);
+
+        if (!res.ok) {
+          setError(data?.detail || data?.error || "Erreur à l'inscription");
+          return;
+        }
+
+        window.location.href = "/";
       }
 
       onClose();
-      window.location.href = "/dashboard";
-    } catch {
+    } catch (err) {
       setError("Erreur réseau. Veuillez réessayer.");
     } finally {
       setIsSubmitting(false);
