@@ -6,9 +6,11 @@ const nextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
       // Bing thumbnails (previous issue)
       { protocol: "https", hostname: "th.bing.com" },
+      // Railway backend (production uploads)
+      { protocol: "https", hostname: "greencartbackend-production-554a.up.railway.app", pathname: "/**" },
       // Local API uploads (FastAPI /static/uploads)
-      { protocol: "http", hostname: "localhost", port: "8000", pathname: "/static/**" },
-      { protocol: "http", hostname: "127.0.0.1", port: "8000", pathname: "/static/**" }
+      { protocol: "http", hostname: "localhost", port: "8000", pathname: "/**" },
+      { protocol: "http", hostname: "127.0.0.1", port: "8000", pathname: "/**" }
     ]
   },
   headers: async () => ([
