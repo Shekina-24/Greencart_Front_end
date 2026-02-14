@@ -171,6 +171,7 @@ export async function updateMyProduct(
     stock: number | null;
     status: string | null;
     isPublished: boolean | null;
+    images: Array<{ url: string; isPrimary?: boolean }> | null;
   }>
 ): Promise<Product> {
   const body: Record<string, unknown> = {};
@@ -186,6 +187,9 @@ export async function updateMyProduct(
   if (payload.stock !== undefined) body.stock = payload.stock;
   if (payload.status !== undefined) body.status = payload.status;
   if (payload.isPublished !== undefined) body.is_published = payload.isPublished;
+  if (payload.images !== undefined) {
+    body.images = (payload.images ?? []).map((i) => ({ url: i.url, is_primary: Boolean(i.isPrimary) }));
+  }
 
   const response = await apiFetch<ProductRead>(`/producer/products/${productId}`, {
     method: "PUT",

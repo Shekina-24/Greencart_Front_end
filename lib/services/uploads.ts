@@ -7,7 +7,7 @@ interface UploadResponse {
 export async function uploadImage(file: File, authToken?: string | null): Promise<string> {
   const form = new FormData();
   form.append("file", file);
-  const response = await fetch(new URL("/api/v1/uploads/image", (process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:8000")), {
+  const response = await fetch(new URL("/api/v1/uploads/image", (process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000")), {
     method: "POST",
     headers: authToken ? { Authorization: `Bearer ${authToken}` } : undefined,
     body: form,
@@ -17,8 +17,7 @@ export async function uploadImage(file: File, authToken?: string | null): Promis
     throw new Error(`Upload failed: ${response.status}`);
   }
   const data = (await response.json()) as UploadResponse;
-  const base = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:8000";
+  const base = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
   const absolute = new URL(data.url, base).toString();
   return absolute;
 }
-
