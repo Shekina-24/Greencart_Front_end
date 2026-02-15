@@ -36,7 +36,7 @@ export default async function SolidairePage() {
       <h2 style={{ marginBottom: "1rem" }}>Dons disponibles</h2>
       {available.length === 0 ? (
         <p style={{ color: "var(--gc-muted)" }}>
-          Aucun don disponible pour l'instant. Revenez bientôt !
+          {"Aucun don disponible pour l'instant. Revenez bientôt !"}
         </p>
       ) : (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1rem" }}>
