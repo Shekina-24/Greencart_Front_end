@@ -27,6 +27,7 @@ const BASE_NAV_LINKS: NavLink[] = [
   { label: "Valeurs", href: "/valeurs" },
   { label: "Catalogue", href: "/catalogue" },
   { label: "Producteurs", href: "/producteurs" },
+  { label: "🤝 Solidaire", href: "/solidaire" },
   { label: "Aide", href: "/aide" },
 ];
 
