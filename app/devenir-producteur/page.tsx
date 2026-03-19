@@ -110,7 +110,7 @@ export default function DevenirProducteurPage() {
               </p>
             </article>
             <article className="card">
-              <h3>4. Lancement & croissance</h3>
+              <h3>4. Lancement &amp; croissance</h3>
               <p className="muted">
                 Commencez à vendre, analysez vos données et optimisez votre offre grâce aux
                 recommandations IA personnalisées.
