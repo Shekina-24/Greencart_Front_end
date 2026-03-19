@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import { persistAnalyticsConsent, readAnalyticsConsent } from '@/lib/analyticsConsent';
 
@@ -25,8 +26,9 @@ export default function ConsentBanner() {
         <p className="muted" style={{ margin: 0 }}>
           Nous utilisons des cookies d&apos;analyse pour comprendre l&apos;usage et améliorer GreenCart. Vous pouvez accepter ou refuser.
         </p>
-        <p>
-         <a href="/cgu">Mentions Légales</a> 
+        <p style={{ margin: 0 }}>
+          {/* ✅ Corrigé : /cgu → /mentions-legales */}
+          <Link href="/mentions-legales">Mentions légales</Link>
         </p>
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
           <button className="btn" type="button" onClick={() => setConsent('denied')}>Refuser</button>
@@ -36,4 +38,3 @@ export default function ConsentBanner() {
     </div>
   );
 }
-

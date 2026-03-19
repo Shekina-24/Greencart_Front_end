@@ -64,19 +64,24 @@ export default function Footer() {
           </ul>
         </section>
 
-        <section aria-label="Mentions legales">
-          <strong>Legal</strong>
+        {/* ✅ Section légale corrigée */}
+        <section aria-label="Légal">
+          <strong>Légal</strong>
           <ul className="footer-links">
             <li>
-              <a href="/cgv">Mentions legales</a>
+              {/* ✅ Mentions légales → /mentions-legales (nouvelle page) */}
+              <Link href="/mentions-legales">Mentions légales</Link>
             </li>
             <li>
-              <a href="/cgu">Conditions d&apos;utilisation</a>
+              {/* ✅ CGV → /cgv (page légalement obligatoire) */}
+              <Link href="/cgv">CGV</Link>
             </li>
             <li>
-              <a href="#">Politique de confidentialite</a>
+              {/* ℹ️ À brancher sur ta future page /privacy */}
+              <Link href="/privacy">Politique de confidentialité</Link>
             </li>
             <li>
+              {/* ℹ️ À brancher sur ta future page /cookies */}
               <a href="#">Cookies</a>
             </li>
           </ul>

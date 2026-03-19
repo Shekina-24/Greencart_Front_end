@@ -1,5 +1,5 @@
 ﻿'use client';
-
+import { useToast } from "@/components/ToastProvider";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getStoredTokens } from "@/lib/auth/tokens";
 import { useRouter } from "next/navigation";
@@ -139,6 +139,7 @@ const randomIdempotencyKey = () =>
 
 export function useShoppingExperience(initialFilters?: Partial<CatalogueFilters>): ShoppingExperience {
   const { user } = useAuth();
+  const { showToast } = useToast();
   const isAuthenticated = Boolean(user);
   const router = useRouter();
 
@@ -400,15 +401,19 @@ export function useShoppingExperience(initialFilters?: Partial<CatalogueFilters>
       applyCartUpdate((items) => {
         const existing = items.find((item) => item.id === product.id);
         if (existing) {
+          // Produit déjà dans le panier → on augmente la quantité
+          showToast(`Quantité mise à jour pour "${product.name}" 🛒`, "success");
           return items.map((item) =>
             item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
           );
         }
+        // Nouveau produit ajouté
+        showToast(`"${product.name}" ajouté au panier ✅`, "success");
         const newItem: CartItem = { ...product, quantity: 1 };
         return [...items, newItem];
       });
     },
-    [applyCartUpdate]
+    [applyCartUpdate, showToast]  // ← ajouter showToast dans les dépendances
   );
 
   const decreaseItem = useCallback(
