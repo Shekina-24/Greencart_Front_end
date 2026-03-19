@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import ProducerBenefitsModal from "./ProducerBenefitsModal";
+import Link from "next/link";
 
 type Props = {
   className?: string;
@@ -9,22 +8,10 @@ type Props = {
 };
 
 export default function BecomeProducerButton({ className, children }: Props) {
-  const [open, setOpen] = useState(false);
-
   return (
-    <>
-      <button
-        type="button"
-        className={className}
-        onClick={() => setOpen(true)}
-      >
-        {children ?? "Devenir producteur partenaire"}
-      </button>
-
-      <ProducerBenefitsModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-      />
-    </>
+    // ✅ Remplace la pop-in par un lien vers la page dédiée
+    <Link href="/devenir-producteur" className={className}>
+      {children ?? "Devenir producteur partenaire"}
+    </Link>
   );
 }
